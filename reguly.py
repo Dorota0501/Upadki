@@ -90,13 +90,13 @@ slownik_reguly = {
     '2020' : ['isLy',81] }
 
 # słowniki zawierajace przynaleznosci do danej etykiety,
-# wartosci wyznaczane sa na bazie regul
+# wartosci wyznaczane sa na bazie slownika regul
 isLy = {}
 mayLy = {}
 notLy = {}
 
 
-def fun(klucz, P40, HW, sigma, HHmax):
+def agregacja(klucz, P40, HW, sigma, HHmax):
     minimum = min(P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])])
     return minimum
     
@@ -115,13 +115,13 @@ def przynal_do_pozycji(P40, HW, sigma, HHmax):
                     pozycja = wartosc_slownik[0]
                     if pozycja == 'isLy':
                         print()
-                        isLy[nr_reguly] = fun(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
+                        isLy[nr_reguly] = agregacja(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
                     elif pozycja == 'mayLy':
                         print()
-                        mayLy[nr_reguly] = fun(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
+                        mayLy[nr_reguly] = agregacja(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
                     elif pozycja == 'notLy':
                         print()
-                        notLy[nr_reguly] = fun(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
+                        notLy[nr_reguly] = agregacja(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
 
 
 def defuzyfikacja():
