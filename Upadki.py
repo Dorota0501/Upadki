@@ -1,12 +1,5 @@
 import reguly
 
-def pose_value(HW, HHmax, SxSzmax, P40, operator):
-    if operator == 1: #AND
-        return HW * HHmax * SxSzmax * P40
-    if operator == 2:
-        return (HW + HHmax + SxSzmax + P40) / 4
-
-
 def fun_HW(HW):
     lmh=[0,0,0]
     #---------------LOW---------------------
@@ -204,6 +197,8 @@ def fun_Pose(pose_Value):
     return isMayNotLy
 
 
+
+# zestaw testowy
 HW = fun_HW(0.70)
 HHmax = fun_HHmax(0.58)
 sigma = fun_SxSzmax(480)

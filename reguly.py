@@ -1,14 +1,5 @@
 
 
-low = 0
-medium = 1
-high = 2
-
-P40_flag = 0;
-HW_flag = 0;
-sigma_flag = 0;
-HHmax_flag = 0;
-
 # ----------------------SŁOWNIK_REGULY----------------------
 # kluczem jest zestawienie etykiet dla P40, HW, sigma, HHmax
 # np. 0212 -> P40   - low
@@ -98,14 +89,19 @@ slownik_reguly = {
     '2021' : ['isLy',80],
     '2020' : ['isLy',81] }
 
+# słowniki zawierajace przynaleznosci do danej etykiety,
+# wartosci wyznaczane sa na bazie regul
+isLy = {}
+mayLy = {}
+notLy = {}
+
+
 def fun(klucz, P40, HW, sigma, HHmax):
     minimum = min(P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])])
     return minimum
     
 
-isLy={}
-mayLy={}
-notLy={}
+
 def przynal_do_pozycji(P40, HW, sigma, HHmax):
     for iP40 in range(3):
         for iHW in range(3):
