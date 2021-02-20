@@ -1,3 +1,5 @@
+import reguly
+
 def pose_value(HW, HHmax, SxSzmax, P40, operator):
     if operator == 1: #AND
         return HW * HHmax * SxSzmax * P40
@@ -11,9 +13,9 @@ def fun_HW(HW):
     a_f_low = -1 / 1.5
     b_f_low = 2 / 1.5
 
-    if HW < 0.5:
+    if HW <= 0.5:
         lmh[0] = 1    
-    if HW >= 0.5 and HW <= 2:
+    if HW > 0.5 and HW <= 2:
         #na podstawie y=ax+b wyznaczam wartosc
         #etykiety "low"
         lmh[0] = a_f_low * HW + b_f_low 
@@ -201,13 +203,23 @@ def fun_Pose(pose_Value):
 
     return isMayNotLy
 
-print("HW: ",fun_HW(0.70))
-print("HHmax: ",fun_HHmax(0.58))
-print("max( sigma x, sigma z): ",fun_SxSzmax(480))
-print("P40: ",fun_P40(0.61))
+
+HW = fun_HW(0.70)
+HHmax = fun_HHmax(0.58)
+sigma = fun_SxSzmax(480)
+P40 = fun_P40(0.61)
+
+
+
+print("HW: ",HW)
+print("HHmax: ",HHmax)
+print("max( sigma x, sigma z): ",sigma)
+print("P40: ",P40)
 print("-------------------")
 
+reguly.przynal_do_pozycji(P40, HW, sigma, HHmax)
+print(reguly.notLy)
+print(reguly.mayLy)
+print(reguly.isLy)
 
-
-print(max(fun_HW(0.5)) , max(fun_HHmax(0.75)), max(fun_SxSzmax(420)), max(fun_P40(0.46)))
-pose = pose_value(max(fun_HW(0.5)) , max(fun_HHmax(0.75)), max(fun_SxSzmax(420)), max(fun_P40(0.46)) , 1)
+reguly.defuzyfikacja()
