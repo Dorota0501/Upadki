@@ -1,4 +1,5 @@
 import reguly
+import Dane
 
 def fun_HW(HW):
     lmh=[0,0,0]
@@ -196,25 +197,56 @@ def fun_Pose(pose_Value):
 
     return isMayNotLy
 
+results = []
+prepared_data = Dane.readFeatures()
+for i in prepared_data.keys():
+    print(i)
+    for j in prepared_data[i]:
+        print(j)
+        Pose = j[0]
+        HW = fun_HW(j[2])
+        HHmax = fun_HHmax(j[4])
+        sigma = fun_SxSzmax(j[3])
+        P40 = fun_P40(j[1])
+        reguly.przynal_do_pozycji(P40, HW, sigma, HHmax)
+        wynik = reguly.defuzyfikacja()
+        print("wynik: ",wynik)
+        print("pose: ",Pose)
+        if wynik == 'notLy' and Pose == -1:
+            results.append(True)
+        elif wynik != 'notLy' and Pose == -1: 
+            results.append(False)
 
-
+        
 # zestaw testowy
-HW = fun_HW(0.70)
-HHmax = fun_HHmax(0.58)
-sigma = fun_SxSzmax(480)
-P40 = fun_P40(0.61)
+#HW = fun_HW(0.70)
+#HHmax = fun_HHmax(0.58)
+#sigma = fun_SxSzmax(480)
+#P40 = fun_P40(0.61)
 
 
 
-print("HW: ",HW)
-print("HHmax: ",HHmax)
-print("max( sigma x, sigma z): ",sigma)
-print("P40: ",P40)
-print("-------------------")
+#print("HW: ",HW)
+#print("HHmax: ",HHmax)
+#print("max( sigma x, sigma z): ",sigma)
+#print("P40: ",P40)
+#print("-------------------")
 
-reguly.przynal_do_pozycji(P40, HW, sigma, HHmax)
-print(reguly.notLy)
-print(reguly.mayLy)
-print(reguly.isLy)
+#reguly.przynal_do_pozycji(P40, HW, sigma, HHmax)
+#print(reguly.notLy)
+#print(reguly.mayLy)
+#print(reguly.isLy)
 
-reguly.defuzyfikacja()
+#reguly.defuzyfikacja()
+
+print("---------------")
+nOfTrue=0
+nOfFalse=0
+for i in results:
+    if i == True:
+        nOfTrue+=1
+    else:
+        nOfFalse+=1
+print(results)
+print("true: ",nOfTrue)
+print("fasle: ",nOfFalse)

@@ -109,29 +109,31 @@ def przynal_do_pozycji(P40, HW, sigma, HHmax):
                 for iHHmax in range(3):
                     klucz = str(iP40)+str(iHW)+str(isigma)+str(iHHmax)
                     wartosc_slownik = slownik_reguly.get(klucz)
-                    print("klucz: ",klucz)
-                    print("wartosc slownik: ",wartosc_slownik)
+                    #print("klucz: ",klucz)
+                    #print("wartosc slownik: ",wartosc_slownik)
                     nr_reguly = wartosc_slownik[1]
                     pozycja = wartosc_slownik[0]
                     if pozycja == 'isLy':
-                        print()
                         isLy[nr_reguly] = agregacja(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
-                    elif pozycja == 'mayLy':
-                        print()
+                    elif pozycja == 'mayLy':                        
                         mayLy[nr_reguly] = agregacja(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
-                    elif pozycja == 'notLy':
-                        print()
+                    elif pozycja == 'notLy':                       
                         notLy[nr_reguly] = agregacja(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
 
 
 def defuzyfikacja():
+
     max_isLy = max(i for i in isLy.values())
     max_mayLy = max(i for i in mayLy.values())
     max_notLy = max(i for i in notLy.values())
     
-    print("max_isLy: ",max_isLy)
-    print("max_mayLy: ",max_mayLy)
-    print("max_notLy: ",max_notLy)
+    #print("max_isLy: ",max_isLy)
+    #print("max_mayLy: ",max_mayLy)
+    #print("max_notLy: ",max_notLy)
 
-    wynik = ((0.11 * max_isLy) + (0.5 * max_mayLy) + ( 0.115 * max_notLy) ) / (max_isLy + max_mayLy + max_notLy)
-    print("wynik: ",wynik)
+    wynik = ((0.11 * max_isLy) + (0.5 * max_mayLy) + ( 0.885 * max_notLy) ) / (max_isLy + max_mayLy + max_notLy)
+    if wynik > 0.5:
+        return 'notLy'
+    else:
+        return wynik
+ 
