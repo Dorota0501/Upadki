@@ -119,34 +119,36 @@ for i in prepared_data.keys():
         HHmax = fun_HHmax(j[4])
         sigma = fun_SxSzmax(j[3])
         P40 = fun_P40(j[1])
+        
         reguly.przynal_do_pozycji(P40, HW, sigma, HHmax)
         wynik = reguly.defuzyfikacja()
-
+        
         reguly.przynal_do_poz_nowe(P40, HW, sigma, HHmax)
         wynik_nowe = reguly.defuzyfikacja_nowe()
         #print("wynik: ",wynik)
         #print("pose: ",Pose)
-        if wynik == 'notLy':
-            if Pose == -1:
-                results.append("TP")
-            else:
-                results.append("FP")
-        elif wynik != 'notLy':
-            if Pose == -1: 
-                results.append("FN")
-            else:
-                results.append("TN")
+        if Pose != 0:
+            if wynik == 'notLy':
+                if Pose == -1:
+                    results.append("TP")
+                else:
+                    results.append("FP")
+            elif wynik != 'notLy':
+                if Pose == -1: 
+                    results.append("FN")
+                else:
+                    results.append("TN")
 
-        if wynik_nowe == 'notLy':
-            if Pose == -1:
-                results_nowe.append("TP")
-            else:
-                results_nowe.append("FP")
-        elif wynik_nowe != 'notLy':
-            if Pose == -1: 
-                results_nowe.append("FN")
-            else:
-                results_nowe.append("TN")
+            if wynik_nowe == 'notLy':
+                if Pose == -1:
+                    results_nowe.append("TP")
+                else:
+                    results_nowe.append("FP")
+            elif wynik_nowe != 'notLy':
+                if Pose == -1: 
+                    results_nowe.append("FN")
+                else:
+                    results_nowe.append("TN")
 
         
 print("---------------")

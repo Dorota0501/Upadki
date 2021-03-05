@@ -204,7 +204,7 @@ def agregacja_nowe(klucz, P40, HW, sigma, HHmax):
         sorted_owa.sort()
         sorted_owa.reverse()
         owa = (sorted_owa[0] * 0.5) + (sorted_owa[1] * 0.3) + (sorted_owa[2] * 0.1) + (sorted_owa[3] * 0.1)   
-    return owa 
+    return owa
 
 def przynal_do_pozycji(P40, HW, sigma, HHmax):
     for iP40 in range(3):
@@ -245,7 +245,6 @@ def defuzyfikacja():
     #print("max_isLy: ",max_isLy)
     #print("max_mayLy: ",max_mayLy)
     #print("max_notLy: ",max_notLy)
-
     wynik = ((0.11 * max_isLy) + (0.5 * max_mayLy) + (0.885 * max_notLy)) / (max_isLy + max_mayLy + max_notLy)
     if wynik >= 0.5:
         return 'notLy'
