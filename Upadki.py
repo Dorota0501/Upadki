@@ -54,7 +54,7 @@ def fun_HHmax(HHmax):
     
     return lmh
 
-def fun_SxSzmax(SxSzmax):
+def fun_SxSzmax(SxSzmax):   #z plikow
     lmh = [0,0,0]
     #---------------LOW---------------------
     if SxSzmax <= 260:
@@ -80,6 +80,45 @@ def fun_SxSzmax(SxSzmax):
         lmh[2] = 1
     
     return lmh
+
+#def fun_SxSzmax(SxSzmax):   #z wykresu
+#    lmh=[0,0,0]
+#    #---------------LOW---------------------
+#    a_f_low = -1 / 230
+#    b_f_low = 380 / 230
+#    if SxSzmax < 150:
+#        lmh[0] = 1    
+#    if SxSzmax >= 150 and SxSzmax <= 380:
+#        #na podstawie y=ax+b wyznaczam wartosc
+#        #etykiety "low"
+#        lmh[0] = a_f_low * SxSzmax + b_f_low 
+#    if SxSzmax > 380:
+#        lmh[0] = 0
+#    #---------------MEDIUM-------------------
+#    a_f_medL = 1 / 110
+#    b_f_medL = -10/11
+#    a_f_medR = -1 / 210
+#    b_f_medR =  52/21
+#    if SxSzmax < 100:
+#        lmh[1] = 0    
+#    if SxSzmax >= 100 and SxSzmax <= 310:
+#        lmh[1] = a_f_medL * SxSzmax + b_f_medL
+#    if SxSzmax > 310 and SxSzmax <= 520:
+#        lmh[1] = a_f_medR * SxSzmax + b_f_medR
+#    if SxSzmax > 520:
+#        lmh[1] = 0
+#    #---------------HIGH---------------------
+#    a_f_high = 1/340
+#    b_f_high = - 150/340
+#    if SxSzmax < 150:
+#        lmh[2] = 0
+#    if SxSzmax >= 150 and SxSzmax <= 490:
+#        lmh[2] = a_f_high*SxSzmax + b_f_high
+#    if SxSzmax > 490:
+#        lmh[2] = 1
+    
+#    return lmh
+
 
 def fun_P40(P40):
     lmh = [0,0,0]
