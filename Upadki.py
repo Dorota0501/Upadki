@@ -159,14 +159,29 @@ for i in prepared_data.keys():
         sigma = fun_SxSzmax(j[3])
         P40 = fun_P40(j[1])
         
-        reguly.przynal_do_pozycji(P40, HW, sigma, HHmax)
-        wynik = reguly.defuzyfikacja()
-        
-        reguly.przynal_do_poz_nowe(P40, HW, sigma, HHmax)
-        wynik_nowe = reguly.defuzyfikacja_nowe()
+
+        filepath0 = "dane_stare_reg.txt"
+        filepath1 = "dane_nowe_reg.txt"
         #print("wynik: ",wynik)
         #print("pose: ",Pose)
         if Pose != 0:
+            f0 = open(filepath0, "a")
+            f0.write(str([i,j[0],j[1],j[2],j[3],j[4]])[1:-1] + ', ')
+            f0.close()
+
+            f1 = open(filepath1, "a")
+            f1.write(str([i,j[0],j[1],j[2],j[3],j[4]])[1:-1] + ', ')
+            f1.close()
+
+
+            print(str([j[0],j[1],j[2],j[3],j[4]])[1:-1] + ',')
+
+            reguly.przynal_do_pozycji(P40, HW, sigma, HHmax)
+            wynik = reguly.defuzyfikacja()
+        
+            reguly.przynal_do_poz_nowe(P40, HW, sigma, HHmax)
+            wynik_nowe = reguly.defuzyfikacja_nowe()
+
             if wynik == 'notLy':
                 if Pose == -1:
                     results.append("TP")

@@ -237,7 +237,7 @@ def przynal_do_poz_nowe(P40, HW, sigma, HHmax):
             notLy_nowe[nr_reguly] = agregacja_nowe(k,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
 
 def defuzyfikacja():
-
+    
     max_isLy = max(i for i in isLy.values())
     max_mayLy = max(i for i in mayLy.values())
     max_notLy = max(i for i in notLy.values())
@@ -246,7 +246,15 @@ def defuzyfikacja():
     #print("max_mayLy: ",max_mayLy)
     #print("max_notLy: ",max_notLy)
     wynik = ((0.11 * max_isLy) + (0.5 * max_mayLy) + (0.885 * max_notLy)) / (max_isLy + max_mayLy + max_notLy)
-    if wynik >= 0.5:
+    
+    filepath0 = "dane_stare_reg.txt"
+    f0 = open(filepath0, "a")
+    f0.write( str(wynik) + '\n')    
+    f0.close
+
+    print(str(wynik) + '\n')
+    
+    if wynik >= 0.75:
         return 'notLy'
     else:
         return wynik
@@ -262,7 +270,13 @@ def defuzyfikacja_nowe():
     #print("max_notLy_nowe: ",max_notLy_nowe)
 
     wynik = ((0.11 * max_isLy) + (0.5 * max_mayLy) + (0.885 * max_notLy)) / (max_isLy + max_mayLy + max_notLy)
-    if wynik >= 0.5:
+    
+    filepath0 = "dane_nowe_reg.txt"
+    f0 = open(filepath0, "a")
+    f0.write( str(wynik) + '\n')    
+    f0.close
+    
+    if wynik >= 0.75:
         return 'notLy'
     else:
         return wynik

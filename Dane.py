@@ -47,14 +47,18 @@ def readFeatures():
                                                                             
         raw_data[k] = [Pose, P40, HW, sigma, HHmax]                         
         #print("raw_data: ",raw_data)
-                                                                               
+   
+    
     for k in raw_data.keys():                                                  
         prepared_data[k] = []                                                    
         for p,l,m,n,o in zip(raw_data[k][0],raw_data[k][1],                    
                              raw_data[k][2],raw_data[k][3],raw_data[k][4]):    
             #print("number: ",i,": ",p,l,m,n,o)
             prepared_data[k].append([p,l,m,n,o])                    #format explained at top  
+            
     print(prepared_data)
+    
+    
     #for i in prepared_data.keys():
     #    print(i)
     #    for j in prepared_data[i]:
