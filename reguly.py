@@ -140,22 +140,75 @@ slownik_nowe_reguly = {
 isLy = {}
 mayLy = {}
 notLy = {}
+
+isLy_pom = {}
+mayLy_pom = {}
+notLy_pom = {}
+
 isLy_nowe = {}
 mayLy_nowe = {}
 notLy_nowe = {}
+wszystkie_nowe = {}
 
+def f_fun(tab):
+    wynik = 0
+    wynik = tab[0] - pow((max(0,tab[0] - tab[1])),2)
+    wynik = tab[2] - pow((max(0,tab[2] - wynik)),2)
+    wynik = tab[3] - pow((max(0,tab[3] - wynik)),2)
+    return wynik
+
+
+def f_fun3(tab):
+    wynik = 0
+    wynik = tab[0] - pow((max(0,tab[0] - tab[1])),2)            
+    wynik = tab[2] - pow((max(0,tab[2] - wynik)),2)
+    return wynik
+
+
+def lehmer(tab, lam):
+    wynik = 0
+    if ((lam * (pow(tab[0],2))) + ((1 - lam) * pow(tab[1],2))) == 0 and ((lam * tab[0]) + ((1 - lam) * tab[1])) == 0:
+        wynik = 0
+    else:
+        wynik = ((lam * (pow(tab[0],2))) + ((1 - lam) * pow(tab[1],2))) / ((lam * tab[0]) + ((1 - lam) * tab[1]))
+    
+    if ((lam * (pow(wynik,2))) + ((1 - lam) * pow(tab[2],2))) == 0 and ((lam * wynik) + ((1 - lam) * tab[2])) == 0:
+        wynik = 0
+    else:
+        wynik = ((lam * (pow(wynik,2))) + ((1 - lam) * pow(tab[2],2))) / ((lam * wynik) + ((1 - lam) * tab[2]))
+    
+    if ((lam * (pow(wynik,2))) + ((1 - lam) * pow(tab[3],2))) == 0 and ((lam * wynik) + ((1 - lam) * tab[3])) == 0:
+        wynik = 0
+    else:
+        wynik = ((lam * (pow(wynik,2))) + ((1 - lam) * pow(tab[3],2))) / ((lam * wynik) + ((1 - lam) * tab[3]))
+
+    return wynik
+
+def lehmer3(tab, lam):
+    wynik = 0
+    if ((lam * (pow(tab[0],2))) + ((1 - lam) * pow(tab[1],2))) == 0 and ((lam * tab[0]) + ((1 - lam) * tab[1])) == 0:
+        wynik = 0
+    else:
+        wynik = ((lam * (pow(tab[0],2))) + ((1 - lam) * pow(tab[1],2))) / ((lam * tab[0]) + ((1 - lam) * tab[1]))
+    
+    if (((lam * (pow(wynik,2))) + ((1 - lam) * pow(tab[2],2)))) == 0 and ((lam * wynik) + ((1 - lam) * tab[2])) == 0:
+        wynik = 0
+    else:
+        wynik = ((lam * (pow(wynik,2))) + ((1 - lam) * pow(tab[2],2))) / ((lam * wynik) + ((1 - lam) * tab[2]))
+
+    return wynik    
 
 def agregacja(klucz, P40, HW, sigma, HHmax):
-
     minimum = min(P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])])
     tp = P40[int(klucz[0])] * HW[int(klucz[1])] * sigma[int(klucz[2])] * HHmax[int(klucz[3])]
     a_mean = (P40[int(klucz[0])] + HW[int(klucz[1])] + sigma[int(klucz[2])] + HHmax[int(klucz[3])]) / 4
     ag_mean = pow(tp, 1 / 4)
     sorted_owa = [P40[int(klucz[0])] ,HW[int(klucz[1])] ,  sigma[int(klucz[2])] ,HHmax[int(klucz[3])]]
     sorted_owa.sort()
-    sorted_owa.reverse()
     owa = (sorted_owa[0] * 0.5) + (sorted_owa[1] * 0.3) + (sorted_owa[2] * 0.1) + (sorted_owa[3] * 0.1)   
-    return owa 
+    f = f_fun([P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])]])
+    leh = lehmer([P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])]],0.7)
+    return minimum 
 
 def agregacja_nowe(klucz, P40, HW, sigma, HHmax):
     if klucz[0] == 'x':
@@ -165,8 +218,10 @@ def agregacja_nowe(klucz, P40, HW, sigma, HHmax):
         ag_mean = pow(tp, 1 / 3)
         sorted_owa = [HW[int(klucz[1])] ,  sigma[int(klucz[2])] ,HHmax[int(klucz[3])]]
         sorted_owa.sort()
-        sorted_owa.reverse()
         owa = (sorted_owa[0] * 0.5) + (sorted_owa[1] * 0.3) + (sorted_owa[2] * 0.1) 
+        f = f_fun3([HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])]])
+        leh = lehmer3([HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])]],0.7)
+
     elif klucz[1] == 'x':
         minimum = min(P40[int(klucz[0])], sigma[int(klucz[2])], HHmax[int(klucz[3])])
         tp = P40[int(klucz[0])] * sigma[int(klucz[2])] * HHmax[int(klucz[3])]
@@ -174,8 +229,10 @@ def agregacja_nowe(klucz, P40, HW, sigma, HHmax):
         ag_mean = pow(tp, 1 / 3)
         sorted_owa = [P40[int(klucz[0])] ,  sigma[int(klucz[2])] ,HHmax[int(klucz[3])]]
         sorted_owa.sort()
-        sorted_owa.reverse()
         owa = (sorted_owa[0] * 0.5) + (sorted_owa[1] * 0.3) + (sorted_owa[2] * 0.1) 
+        f = f_fun3([P40[int(klucz[0])], sigma[int(klucz[2])], HHmax[int(klucz[3])]])
+        leh = lehmer3([P40[int(klucz[0])], sigma[int(klucz[2])], HHmax[int(klucz[3])]],0.7)
+
     elif klucz[2] == 'x':
         minimum = min(P40[int(klucz[0])], HW[int(klucz[1])], HHmax[int(klucz[3])])
         tp = P40[int(klucz[0])] * HW[int(klucz[1])] * HHmax[int(klucz[3])]
@@ -183,8 +240,11 @@ def agregacja_nowe(klucz, P40, HW, sigma, HHmax):
         ag_mean = pow(tp, 1 / 3)
         sorted_owa = [P40[int(klucz[0])] ,HW[int(klucz[1])] , HHmax[int(klucz[3])]]
         sorted_owa.sort()
-        sorted_owa.reverse()
         owa = (sorted_owa[0] * 0.5) + (sorted_owa[1] * 0.3) + (sorted_owa[2] * 0.1) 
+        f = f_fun3([P40[int(klucz[0])], HW[int(klucz[1])], HHmax[int(klucz[3])]])
+        leh = lehmer3([P40[int(klucz[0])], HW[int(klucz[1])], HHmax[int(klucz[3])]],0.7)
+
+
     elif klucz[3] == 'x':
         minimum = min(P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])])
         tp = P40[int(klucz[0])] * HW[int(klucz[1])] * sigma[int(klucz[2])]
@@ -192,8 +252,9 @@ def agregacja_nowe(klucz, P40, HW, sigma, HHmax):
         ag_mean = pow(tp, 1 / 3)
         sorted_owa = [P40[int(klucz[0])] ,HW[int(klucz[1])] ,  sigma[int(klucz[2])]]
         sorted_owa.sort()
-        sorted_owa.reverse()
         owa = (sorted_owa[0] * 0.5) + (sorted_owa[1] * 0.3) + (sorted_owa[2] * 0.1) 
+        f = f_fun3([P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])]])
+        leh = lehmer3([P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])]],0.7)
 
     else:
         minimum = min(P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])])
@@ -202,9 +263,11 @@ def agregacja_nowe(klucz, P40, HW, sigma, HHmax):
         ag_mean = pow(tp, 1 / 4)
         sorted_owa = [P40[int(klucz[0])] ,HW[int(klucz[1])] ,  sigma[int(klucz[2])] ,HHmax[int(klucz[3])]]
         sorted_owa.sort()
-        sorted_owa.reverse()
-        owa = (sorted_owa[0] * 0.5) + (sorted_owa[1] * 0.3) + (sorted_owa[2] * 0.1) + (sorted_owa[3] * 0.1)   
-    return owa
+        owa = (sorted_owa[0] * 0.5) + (sorted_owa[1] * 0.3) + (sorted_owa[2] * 0.1) + (sorted_owa[3] * 0.1)
+        f = f_fun([P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])]])
+        leh = lehmer([P40[int(klucz[0])], HW[int(klucz[1])], sigma[int(klucz[2])], HHmax[int(klucz[3])]],0.7)
+
+    return minimum
 
 def przynal_do_pozycji(P40, HW, sigma, HHmax):
     for iP40 in range(3):
@@ -223,8 +286,10 @@ def przynal_do_pozycji(P40, HW, sigma, HHmax):
                         mayLy[nr_reguly] = agregacja(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
                     elif pozycja == 'notLy':                       
                         notLy[nr_reguly] = agregacja(klucz,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
-
-def przynal_do_poz_nowe(P40, HW, sigma, HHmax):
+def przynal_do_poz_nowe(P40, HW, sigma, HHmax,nr):
+    filepath11 = "wyniki_s_r.txt"
+    f11 = open(filepath11, "a")
+    f11.write("\nklatka: " + str(nr) + "\n")
     for k in slownik_nowe_reguly.keys():
         wartosc_slownik = slownik_nowe_reguly.get(k)
         nr_reguly = wartosc_slownik[1]
@@ -235,13 +300,68 @@ def przynal_do_poz_nowe(P40, HW, sigma, HHmax):
             mayLy_nowe[nr_reguly] = agregacja_nowe(k,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
         elif pozycja == 'notLy':                       
             notLy_nowe[nr_reguly] = agregacja_nowe(k,P40, HW, sigma, HHmax) #wrzuc aktualne wartosci tablic parametrow
-
+        wszystkie_nowe[nr_reguly] = agregacja_nowe(k,P40, HW, sigma, HHmax)
+        f11.write(str(nr_reguly) + "," + str(wszystkie_nowe[nr_reguly]) + '\n')  
+    #utwórz plik i przepisz do niego wyniki ze slownikow
+    
+      
+    f11.close
+            
 def defuzyfikacja():
     
-    max_isLy = max(i for i in isLy.values())
-    max_mayLy = max(i for i in mayLy.values())
-    max_notLy = max(i for i in notLy.values())
+    max_isLy = max(i for i in isLy.values()) 
+
     
+    max_isLy1 = -1
+    isLy_key = 0
+    for i in isLy.keys():
+        if max_isLy1 < isLy.get(i):
+            max_isLy1 = isLy.get(i)
+            isLy_key = i
+    print(" max_isLy1: ",  max_isLy1)
+    print("isLy_key: ", isLy_key)
+
+    # z tego maxa sprawdzic dla jakiej wartosci ono wychodzi
+    # i ogarnac do tego maxa przedzialy i z nich cetrum trzeba (srodek
+    # dziedziny)
+    max_mayLy = max(i for i in mayLy.values())
+    max_mayLy1 = -1
+    mayLy_key = 0
+    for i in mayLy.keys():
+        if max_mayLy1 < mayLy.get(i):
+            max_mayLy1 = mayLy.get(i)
+            mayLy_key = i
+    print(" max_mayLy1: ",  max_mayLy1)
+    print("mayLy_key: ", mayLy_key)
+
+    #-------------------------------------------------------
+    max_notLy = max(i for i in notLy.values())
+    max_notLy1 = -1
+    notLy_key = 0
+    for i in notLy.keys():
+        if max_notLy1 < notLy.get(i):
+            max_notLy1 = notLy.get(i)
+            notLy_key = i
+    print(" max_notLy1: ",  max_notLy1)
+    print("notLy_key: ", notLy_key)
+
+    filepath_k_r = "klasyfikacja_regula.txt"
+    f_k_r = open(filepath_k_r, "a")
+    
+
+
+    if max_mayLy1 > max_isLy1 and max_mayLy1 > max_notLy1:
+        print("mayLy: ",max_mayLy1, ", r",mayLy_key)
+        f_k_r.write("\nmayLy, " + str(max_mayLy1) + ", r" + str(mayLy_key))
+    if max_isLy1 > max_mayLy1 and max_isLy1 > max_notLy1:
+        print("isLy: ",max_isLy1, ", r",isLy_key)
+        f_k_r.write("\nisLy, " + str(max_isLy1) + ", r" + str(isLy_key))
+    if max_notLy1 > max_isLy1 and max_notLy1 > max_mayLy1:
+        print("notLy: ",max_notLy1, ", r",notLy_key)
+        f_k_r.write("\nnotLy, " + str(max_notLy1) + ", r" + str(notLy_key))
+
+    f_k_r.close
+
     #print("max_isLy: ",max_isLy)
     #print("max_mayLy: ",max_mayLy)
     #print("max_notLy: ",max_notLy)
@@ -249,12 +369,12 @@ def defuzyfikacja():
     
     filepath0 = "dane_stare_reg.txt"
     f0 = open(filepath0, "a")
-    f0.write( str(wynik) + '\n')    
+    f0.write(str(wynik) + '\n')    
     f0.close
 
     print(str(wynik) + '\n')
     
-    if wynik >= 0.75:
+    if wynik >= 0.5:
         return 'notLy'
     else:
         return wynik
@@ -268,15 +388,15 @@ def defuzyfikacja_nowe():
     #print("max_isLy_nowe: ",max_isLy_nowe)
     #print("max_mayLy_nowe: ",max_mayLy_nowe)
     #print("max_notLy_nowe: ",max_notLy_nowe)
-
-    wynik = ((0.11 * max_isLy) + (0.5 * max_mayLy) + (0.885 * max_notLy)) / (max_isLy + max_mayLy + max_notLy)
+    #
+    wynik = ((0.11 * max_isLy) + (0.5 * max_mayLy) + (0.885 * max_notLy)) / (max_isLy + max_mayLy + max_notLy)  
     
     filepath0 = "dane_nowe_reg.txt"
     f0 = open(filepath0, "a")
-    f0.write( str(wynik) + '\n')    
+    f0.write(str(wynik) + '\n')    
     f0.close
     
-    if wynik >= 0.75:
+    if wynik >= 0.5:
         return 'notLy'
     else:
         return wynik

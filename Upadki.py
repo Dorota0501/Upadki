@@ -1,8 +1,33 @@
 import reguly
 import Dane
+import math
+
+from matplotlib import pyplot as mp
+import numpy as np
+
+def gaussian(x, mu, sig):
+    return np.exp(-np.power(x - mu, 2.) / (2 * np.power(sig, 2.)))
+
+
 
 def fun_HW(HW):
     lmh = [0,0,0]
+
+    #gaussian LOW
+    #       s1, c1, s2, c2
+    # f(x,[-0.160 0.544 0.500 0.300] ) = e ^ ( -(x-c1)^2 / 2(s1^2)
+
+    #x_values = np.arange(0,4,0.05)
+    #for mu, sig in [(0.500, 0.300),(2.000, 0.440),(3.230, 1.000)]:
+    #    mp.plot(x_values, gaussian(x_values, mu, sig))
+
+    #mp.show()
+
+
+    #print("\nf:",f)
+    ##print("xs")
+    
+
     #---------------LOW---------------------
     if HW <= 0.5:
         lmh[0] = 1    
@@ -81,26 +106,26 @@ def fun_SxSzmax(SxSzmax):   #z plikow
     
     return lmh
 
-#def fun_SxSzmax(SxSzmax):   #z wykresu
+#def fun_SxSzmax(SxSzmax): #z wykresu
 #    lmh=[0,0,0]
 #    #---------------LOW---------------------
 #    a_f_low = -1 / 230
 #    b_f_low = 380 / 230
 #    if SxSzmax < 150:
-#        lmh[0] = 1    
+#        lmh[0] = 1
 #    if SxSzmax >= 150 and SxSzmax <= 380:
 #        #na podstawie y=ax+b wyznaczam wartosc
 #        #etykiety "low"
-#        lmh[0] = a_f_low * SxSzmax + b_f_low 
+#        lmh[0] = a_f_low * SxSzmax + b_f_low
 #    if SxSzmax > 380:
 #        lmh[0] = 0
 #    #---------------MEDIUM-------------------
 #    a_f_medL = 1 / 110
 #    b_f_medL = -10/11
 #    a_f_medR = -1 / 210
-#    b_f_medR =  52/21
+#    b_f_medR = 52/21
 #    if SxSzmax < 100:
-#        lmh[1] = 0    
+#        lmh[1] = 0
 #    if SxSzmax >= 100 and SxSzmax <= 310:
 #        lmh[1] = a_f_medL * SxSzmax + b_f_medL
 #    if SxSzmax > 310 and SxSzmax <= 520:
@@ -118,8 +143,6 @@ def fun_SxSzmax(SxSzmax):   #z plikow
 #        lmh[2] = 1
     
 #    return lmh
-
-
 def fun_P40(P40):
     lmh = [0,0,0]
     #---------------LOW---------------------
@@ -149,6 +172,8 @@ def fun_P40(P40):
 results = []
 results_nowe = []
 prepared_data = Dane.readFeatures()
+#Dane.cut_data(prepared_data)
+nr_klatki = 1
 for i in prepared_data.keys():
     print(i)
     for j in prepared_data[i]:
@@ -165,13 +190,13 @@ for i in prepared_data.keys():
         #print("wynik: ",wynik)
         #print("pose: ",Pose)
         if Pose != 0:
-            f0 = open(filepath0, "a")
-            f0.write(str([i,j[0],j[1],j[2],j[3],j[4]])[1:-1] + ', ')
-            f0.close()
+            #f0 = open(filepath0, "a")
+            #f0.write(str([i,j[5],j[0],j[1],j[2],j[3],j[4]])[1:-1] + ', ')
+            #f0.close()
 
-            f1 = open(filepath1, "a")
-            f1.write(str([i,j[0],j[1],j[2],j[3],j[4]])[1:-1] + ', ')
-            f1.close()
+            #f1 = open(filepath1, "a")
+            #f1.write(str([i,j[5],j[0],j[1],j[2],j[3],j[4]])[1:-1] + ', ')
+            #f1.close()
 
 
             print(str([j[0],j[1],j[2],j[3],j[4]])[1:-1] + ',')
@@ -179,22 +204,33 @@ for i in prepared_data.keys():
             reguly.przynal_do_pozycji(P40, HW, sigma, HHmax)
             wynik = reguly.defuzyfikacja()
         
-            reguly.przynal_do_poz_nowe(P40, HW, sigma, HHmax)
+            reguly.przynal_do_poz_nowe(P40, HW, sigma, HHmax,nr_klatki)
+            
             wynik_nowe = reguly.defuzyfikacja_nowe()
 
+
+            filepath_k_r = "klasyfikacja_regula.txt"
+            f_k_r = open(filepath_k_r, "a")
+    
             if wynik == 'notLy':
                 if Pose == -1:
                     results.append("TP")
+                    f_k_r.write(", TP, klatka: " + str(nr_klatki))
                 else:
                     results.append("FP")
+                    f_k_r.write(", FP, klatka: " + str(nr_klatki))
             elif wynik != 'notLy':
                 if Pose == -1: 
                     results.append("FN")
+                    f_k_r.write(", FN, klatka: " + str(nr_klatki))
                 else:
                     results.append("TN")
+                    f_k_r.write(", TN, klatka: " + str(nr_klatki))
+            f_k_r.close()
+            nr_klatki +=1
 
             if wynik_nowe == 'notLy':
-                if Pose == -1:
+                if Pose == -1:      #pozycja rzeczywista
                     results_nowe.append("TP")
                 else:
                     results_nowe.append("FP")
@@ -247,3 +283,5 @@ print("TP: ",TP)
 print("TN: ",TN)
 print("FP: ",FP)
 print("FN: ",FN)
+
+
